@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Study Timer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="timer-page">
+
+<h1>Focus Timer</h1>
+<div class="time-input">
+
+
+<input type="number" id="hoursInput" placeholder="Hours"> 
+
+<input type="number" id="minutesInput" placeholder="Minutes">
+<button onclick="setTimer()">Set Timer</button>
+
+</div>
+
+<div id="timer" class="timer-display">
+00:00:00
+</div>
+
+<div class="timer-buttons">
+
+<button onclick="startTimer()">Start</button>
+<button onclick="pauseTimer()">Pause</button>
+<button onclick="resetTimer()">Reset</button>
+
+</div>
+
+<a href="index.html" class="back-btn">← Back to Home</a>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

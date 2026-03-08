@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>StudyHelper</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav>
+
+<h2 class="logo">StudyHelper</h2>
+
+<button id="darkToggle">🌙</button>
+
+</nav>
+
+
+<section class="hero">
+
+<h1 class="hero-title">Study smarter. Stay organized.</h1>
+
+<p>
+All-in-one tools for students to manage exams,
+track deadlines and stay productive.
+</p>
+
+<button onclick="scrollToTools()">Explore Tools ↓</button>
+
+<button id="installBtn" style="display:none;">
+Install StudyHelper 📱
+</button>
+
+</section>
+
+
+
+<section class="features">
+
+<div class="feature">
+<h3>⏱ Stay Focused</h3>
+<p>Use the study timer to stay focused with the Pomodoro technique.</p>
+</div>
+
+<div class="feature">
+<h3>📅 Track Your Exams</h3>
+<p>Never forget exams again. Track countdowns and stay prepared.</p>
+</div>
+
+<div class="feature">
+<h3>🎓 Predict Your Grades</h3>
+<p>Calculate your expected grade based on midterms and finals.</p>
+</div>
+
+</section>
+
+
+
+<section class="deadlines">
+
+<h2>Upcoming Deadlines</h2>
+
+<div id="deadlineList"></div>
+
+</section>
+
+
+
+<section class="tips">
+
+<h2>Made for Students</h2>
+
+<p>
+Install StudyHelper on your phone so you can quickly check
+exams, grades and study tasks anytime.
+</p>
+
+</section>
+
+
+
+<div class="tools" id="tools">
+
+<a href="timer.html" class="card">
+<h3>Study Timer</h3>
+<p>Focus using the Pomodoro technique</p>
+</a>
+
+<a href="countdown.html" class="card">
+<h3>Deadlines Tracker</h3>
+<p>Track exams and assignments</p>
+</a>
+
+<a href="grade.html" class="card">
+<h3>Grade Predictor</h3>
+<p>Estimate your final grade</p>
+</a>
+
+</div>
+
+
+
+<script>
+
+/* LOGIN CHECK */
+
+let user = localStorage.getItem("user");
+
+if(!user){
+window.location="login.html";
+}
+
+
+/* SCROLL */
+
+function scrollToTools(){
+document.getElementById("tools").scrollIntoView({
+behavior:"smooth"
+});
+}
+
+
+/* INSTALL APP */
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt",(e)=>{
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+document.getElementById("installBtn").style.display="block";
+
+});
+
+document.getElementById("installBtn").addEventListener("click",()=>{
+
+deferredPrompt.prompt();
+
+});
+
+
+/* SERVICE WORKER */
+
+if("serviceWorker" in navigator){
+
+navigator.serviceWorker.register("service-worker.js")
+.then(()=>{
+console.log("Service Worker Registered");
+});
+
+}
+
+
+
+/* LOAD DEADLINES + EXAMS */
+
+let deadlines = JSON.parse(localStorage.getItem("deadlines")) || [];
+let exams = JSON.parse(localStorage.getItem("exams")) || [];
+
+let items = [...deadlines, ...exams];
+
+let list = document.getElementById("deadlineList");
+
+list.innerHTML="";
+
+items.forEach(item => {
+
+let today = new Date();
+let date = new Date(item.date);
+
+let diff = Math.ceil((date - today)/(1000*60*60*24));
+
+/* TYPE */
+
+let typeLabel = "";
+
+if(item.type === "exam"){
+typeLabel = "📘 Exam";
+}
+else if(item.type === "assignment"){
+typeLabel = "📝 Assignment";
+}
+else{
+typeLabel = "📌 Task";
+}
+
+/* CARD */
+
+let card = document.createElement("div");
+card.className = "deadline-card";
+
+let progress = Math.max(0, 100 - (diff * 10));
+
+card.innerHTML = `
+<h3>${typeLabel} - ${item.title || item.name || "Task"}</h3>
+
+<div class="progress-bar">
+<div class="progress" style="width:${progress}%"></div>
+</div>
+
+<p>Due in ${diff} days</p>
+`;
+
+list.appendChild(card);
+
+});
+
+/* DARK MODE */
+
+let darkBtn = document.getElementById("darkToggle");
+
+if(localStorage.getItem("darkMode") === "on"){
+document.body.classList.add("dark");
+}
+
+darkBtn.onclick = () => {
+
+document.body.classList.toggle("dark");
+
+if(document.body.classList.contains("dark")){
+localStorage.setItem("darkMode","on");
+}else{
+localStorage.setItem("darkMode","off");
+}
+
+};
+</script>
+<footer class="footer">
+
+<div class="footer-content">
+
+<h3>StudyHelper</h3>
+
+<p>Smart tools for students to stay organized and productive.</p>
+
+<p class="footer-date">
+© 2026 StudyHelper • Built by Kübra İnanç
+</p>
+
+</div>
+
+</footer>
+</body>
+</html>

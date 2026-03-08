@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Exam Countdown</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.container{
+max-width:600px;
+margin:auto;
+text-align:center;
+padding-top:80px;
+}
+
+.exam-inputs{
+margin:30px 0;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:15px;
+}
+
+.exam-inputs input,
+.exam-inputs select{
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+width:100%;
+max-width:400px;
+}
+
+.exam-inputs button{
+padding:12px 20px;
+background:#6c63ff;
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+.exam-list{
+margin-top:30px;
+}
+
+.exam-card{
+background:white;
+padding:20px;
+margin:15px 0;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.delete-btn{
+margin-top:10px;
+background:#ff4d4d;
+border:none;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📚 Exam & Assignment Tracker</h1>
+
+<div class="exam-inputs">
+
+<input type="text" id="subject" placeholder="Subject name">
+
+<input type="date" id="examDate">
+
+<select id="type">
+<option value="exam">Exam</option>
+<option value="assignment">Assignment</option>
+</select>
+
+<button onclick="addExam()">Add</button>
+
+</div>
+
+<div id="examList" class="exam-list"></div>
+
+<br>
+
+<a href="index.html">← Back to Home</a>
+
+</div>
+
+<script>
+
+let exams = JSON.parse(localStorage.getItem("exams")) || [];
+
+function saveExams(){
+localStorage.setItem("exams", JSON.stringify(exams));
+}
+
+function addExam(){
+
+let subject = document.getElementById("subject").value;
+let date = document.getElementById("examDate").value;
+let type = document.getElementById("type").value;
+
+if(subject=="" || date==""){
+alert("Please fill all fields");
+return;
+}
+
+let exam = {
+title: subject,
+date: date,
+type: type
+};
+
+exams.push(exam);
+
+saveExams();
+
+displayExams();
+
+document.getElementById("subject").value="";
+document.getElementById("examDate").value="";
+}
+
+function deleteExam(index){
+
+exams.splice(index,1);
+
+saveExams();
+
+displayExams();
+
+}
+
+function displayExams(){
+
+let examList = document.getElementById("examList");
+
+examList.innerHTML="";
+
+exams.forEach((e,index)=>{
+
+let today = new Date();
+let examDate = new Date(e.date);
+let diff = examDate - today;
+let days = Math.ceil(diff/(1000*60*60*24));
+
+let label = e.type === "exam" ? "📘 Exam" : "📝 Assignment";
+
+let card = document.createElement("div");
+
+card.className="exam-card";
+
+card.innerHTML = `
+
+<h3 class="${e.completed ? 'done':''}">
+${e.completed ? '✔ ' : ''}${label} - ${e.title}
+</h3>
+
+<p>Due in ${days} days</p>
+
+<button onclick="completeTask(${index})">
+✔ Complete
+</button>
+
+<button class="delete-btn" onclick="deleteExam(${index})">
+Delete
+</button>
+
+`;
+examList.appendChild(card);
+
+});
+
+}
+
+displayExams();
+
+function completeTask(index){
+
+exams[index].completed = true;
+
+localStorage.setItem("exams", JSON.stringify(exams));
+
+displayExams();
+
+}
+</script>
+
+</body>
+</html>

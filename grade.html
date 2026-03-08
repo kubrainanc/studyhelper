@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Grade Predictor</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.container{
+max-width:500px;
+margin:auto;
+padding-top:80px;
+text-align:center;
+}
+
+.course-form{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+input{
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+margin:6px;
+text-align:center;
+}
+
+.midterm-row{
+display:flex;
+align-items:center;
+gap:8px;
+margin:5px 0;
+}
+
+.midterm-input{
+width:180px;
+}
+
+button{
+padding:10px 18px;
+background:#6c63ff;
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+margin:6px;
+}
+
+.delete-midterm{
+background:#ff4d4d;
+padding:6px 10px;
+}
+
+.course-card{
+background:white;
+padding:20px;
+margin:15px auto;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.grade{
+font-size:20px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.delete-course{
+background:#ff4d4d;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎓 Grade Predictor</h1>
+
+<div class="course-form">
+
+<input type="text" id="courseName" placeholder="Course name">
+
+<div id="midtermContainer"></div>
+
+<button onclick="addMidterm()">+ Add Midterm</button>
+
+<input type="number" id="finalExam" placeholder="Final Exam">
+
+<button onclick="addCourse()">Add Course</button>
+
+</div>
+
+<div id="courseList"></div>
+
+<a href="index.html">← Back to Home</a>
+
+</div>
+
+<script>
+
+let courses = JSON.parse(localStorage.getItem("courses")) || [];
+
+function saveCourses(){
+localStorage.setItem("courses", JSON.stringify(courses));
+}
+
+function addMidterm(){
+
+let container=document.getElementById("midtermContainer");
+
+let count=container.children.length+1;
+
+let row=document.createElement("div");
+row.className="midterm-row";
+
+row.innerHTML=`
+<input type="number" class="midterm-input" placeholder="Midterm ${count}">
+<button class="delete-midterm" onclick="removeMidterm(this)">X</button>
+`;
+
+container.appendChild(row);
+
+}
+
+function removeMidterm(btn){
+
+btn.parentElement.remove();
+
+}
+
+function addCourse(){
+
+let name=document.getElementById("courseName").value;
+let final=Number(document.getElementById("finalExam").value);
+
+let midtermInputs=document.querySelectorAll(".midterm-input");
+
+let midterms=[];
+
+midtermInputs.forEach(input=>{
+midterms.push(Number(input.value));
+});
+
+if(midterms.length===0){
+alert("Add at least one midterm");
+return;
+}
+
+let midAvg=midterms.reduce((a,b)=>a+b,0)/midterms.length;
+
+let grade=(midAvg*0.4)+(final*0.6);
+
+let course={
+name:name,
+midterms:midterms,
+final:final,
+grade:grade.toFixed(2)
+};
+
+courses.push(course);
+
+saveCourses();
+
+displayCourses();
+
+}
+
+function deleteCourse(index){
+
+courses.splice(index,1);
+
+saveCourses();
+
+displayCourses();
+
+}
+
+function displayCourses(){
+
+let list=document.getElementById("courseList");
+
+list.innerHTML="";
+
+courses.forEach((c,index)=>{
+
+let midtermList="";
+
+c.midterms.forEach((m,i)=>{
+midtermList+=`<p>Midterm ${i+1}: ${m}</p>`;
+});
+
+let card=document.createElement("div");
+
+card.className="course-card";
+
+card.innerHTML=`
+
+<h3>${c.name}</h3>
+
+${midtermList}
+
+<p>Final: ${c.final}</p>
+
+<div class="grade">Final Grade: ${c.grade}</div>
+
+<button class="delete-course" onclick="deleteCourse(${index})">Delete</button>
+
+`;
+
+list.appendChild(card);
+
+});
+
+}
+
+displayCourses();
+
+</script>
+
+</body>
+</html>
