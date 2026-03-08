@@ -1,25 +1,29 @@
 # StudyHelper
 
-StudyHelper is a simple productivity web application designed to help students organize their studies, track deadlines, and stay focused.
+A simple productivity web app that helps students organize their studies, track exams and assignments, and stay focused.
 
-The application provides tools for managing exams, assignments, and study sessions in one place.
+---
 
-## Live Demo
+## Live Website
 
-You can access the website here:
+You can try the app here:
 
 https://kubrainanc.github.io/studyhelper/
 
+---
+
 ## Features
 
-• Study Timer (Pomodoro-style focus timer)  
-• Exam and Assignment Deadline Tracker  
-• Progress bar showing time remaining until deadlines  
-• Mark tasks as completed  
-• Delete tasks  
-• Dark mode  
-• Animated gradient background  
-• Installable as a Progressive Web App (PWA)
+- Study Timer (Pomodoro style)
+- Exam & Assignment Deadline Tracker
+- Progress bar showing time left
+- Mark tasks as completed
+- Delete tasks
+- Dark Mode
+- Animated gradient UI
+- Installable as a Progressive Web App (PWA)
+
+---
 
 ## Tools Included
 
@@ -27,10 +31,12 @@ https://kubrainanc.github.io/studyhelper/
 A simple timer to help students stay focused while studying.
 
 ### Deadlines Tracker
-Track exams and assignments with an automatic countdown.
+Track exams and assignments with automatic countdown.
 
 ### Grade Predictor
 Estimate your final grade based on midterm and final exam scores.
+
+---
 
 ## Technologies Used
 
@@ -38,21 +44,23 @@ HTML
 CSS  
 JavaScript  
 LocalStorage  
-GitHub Pages
+GitHub Pages  
+
+---
 
 ## Project Structure
 
 ```
 index.html
-login.html
 countdown.html
 timer.html
 grade.html
 style.css
-script.js
 manifest.json
 service-worker.js
 ```
+
+---
 
 ## Installation
 
@@ -62,15 +70,19 @@ Clone the repository:
 git clone https://github.com/kubrainanc/studyhelper.git
 ```
 
-Open `index.html` in your browser.
+Open **index.html** in your browser.
+
+---
 
 ## Future Improvements
 
-• User account system  
-• Cloud database for storing tasks  
-• Calendar view for deadlines  
-• Mobile UI improvements  
-• Notification system for upcoming exams
+- User authentication system
+- Cloud database
+- Calendar view
+- Notification reminders
+- Mobile UI improvements
+
+---
 
 ## Author
 
